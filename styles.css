@@ -15,9 +15,14 @@ body {
 }
 body button {
   position: absolute;
-  top: 10vh;
-  right: 10vw;
+  top: 5vh;
+  right: 5vw;
   display: none;
+  border: 3px solid blanchedalmond;
+  background-color: #1C76AD;
+  color: blanchedalmond;
+  padding: 1%;
+  cursor: pointer;
 }
 body audio {
   display: none;

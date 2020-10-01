@@ -1,4 +1,4 @@
-@import "./stylesheets/variables.scss";
+@import "./assets/stylesheets/variables.scss";
 * {
     padding: 0;
     margin: 0;
@@ -16,9 +16,14 @@ body {
 
     button {
         position: absolute;
-        top: 10vh;
-        right: 10vw;
+        top: 5vh;
+        right: 5vw;
         display: none;
+        border: 3px solid blanchedalmond;
+        background-color: $background-color;
+        color: blanchedalmond;
+        padding: 1%;
+        cursor: pointer;
     }
 
     audio {
