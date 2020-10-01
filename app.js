@@ -128,7 +128,7 @@ class GameBoard  {
     }
 
     changeInterval() {
-        this.interval *= 0.9;
+        this.interval *= 0.8;
         clearInterval(this.intervalMethod);
         this.intervalMethod = setInterval(() => this.activePiece.pieceFall(), this.interval);
     }

@@ -181,7 +181,7 @@ function () {
     value: function changeInterval() {
       var _this3 = this;
 
-      this.interval *= 0.9;
+      this.interval *= 0.8;
       clearInterval(this.intervalMethod);
       this.intervalMethod = setInterval(function () {
         return _this3.activePiece.pieceFall();
