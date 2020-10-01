@@ -14,7 +14,7 @@ class Tetromino {
         this.mapping.forEach(squareValue => {
             gameBoard.hook.childNodes[squareValue].style.backgroundColor = this.colour;
             gameBoard.hook.childNodes[squareValue].classList.add("active");
-        })
+        });
     }
 
     // Allow the piece to fall down one row, unless it's status becomes fixed
@@ -108,34 +108,39 @@ const newTetromino = num => {
     if (num === 6) return new Tetromino(15,4,5,6, "gray", [[-1, 1, 10, 19], [1, 21, 10, -1], [1, -1, -10, -19], [-1, -21, -10, 1]]);
 };
 
-const gameBoard = {
-    hook: document.querySelector(".game-board"),
-    createDivs: function() {
+class GameBoard  {
+    constructor(activePiece){
+        this.activePiece = activePiece;
+        this.hook = document.querySelector(".game-board");
+        this.interval = 1000;
+    }
+
+    createDivs() {
         for (let i = 1; i <= 200; i++){
             let div = document.createElement("div");
-            gameBoard.hook.prepend(div);
+            this.hook.prepend(div);
         }
         for (let i = 1; i <= 20; i++){
             let div = document.createElement("div");
             div.style.display = "none";
-            gameBoard.hook.prepend(div);
+            this.hook.prepend(div);
         }
-    },
+    }
 
-    activePiece: newTetromino(Math.floor(Math.random() * 7)),
+    changeInterval() {
+        this.interval -= 100;
+        clearInterval(this.intervalMethod);
+        this.intervalMethod = setInterval(() => this.activePiece.pieceFall(), this.interval);
+    }
 
-    startGame: function() {
+    startGame() {
         this.activePiece.render();
-        document.addEventListener("keydown", e => {
-            if (e.key === "ArrowDown") this.activePiece.pieceFall();
-            if (e.key === "ArrowUp") this.activePiece.pieceRotate();
-            if (e.key === "ArrowLeft") this.activePiece.pieceLeft();
-            if (e.key === "ArrowRight") this.activePiece.pieceRight();
-        });
-    },
+        this.intervalMethod = setInterval(() => this.activePiece.pieceFall(), this.interval);
+        this.speedChanger = setInterval(() => this.changeInterval(), 10000);
+    }
 
-    checkRow: function() {
-        let nodes = Array.from(gameBoard.hook.childNodes);
+    checkRow() {
+        let nodes = Array.from(this.hook.childNodes);
         let rows = [];
         for (let i = 20; i < 220; i += 10) {
             let chunk = nodes.slice(i, i + 10);
@@ -150,44 +155,53 @@ const gameBoard = {
                     div.style.display = "block";
                     nodes.splice(20, 0, div);
                 }
-                gameBoard.hook.innerHTML = "";
+                this.hook.innerHTML = "";
                 nodes.forEach(node => {
-                    gameBoard.hook.appendChild(node);
+                    this.hook.appendChild(node);
                 });
             }
         });
-    },
+    }
 
-    checkLose: function() {
-        let nodes = Array.from(gameBoard.hook.childNodes);
+    checkLose() {
+        let nodes = Array.from(this.hook.childNodes);
         for (let i = 0; i < 20; i ++) {
             if (nodes[i].classList.contains("fixed")){
+                clearInterval(this.intervalMethod);
+                clearInterval(this.speedChanger);
                 alert("You lose!");
-                this.reset();
-                return true;
+                return this.reset();
             }
         };
-    },
+    }
 
-    reset: function() {
-        gameBoard.hook.innerHTML = "";
+    reset() {
         let welcomeScreen = `
-                        <article class="welcome-screen">
-                            <h1>Tetris</h1>
-                            <button>Start new game</button>
-                        </article>`;
+                            <article class="welcome-screen">
+                                <h1>Tetris</h1>
+                                <button>Start new game</button>
+                            </article>`;
         gameBoard.hook.innerHTML = welcomeScreen;
+        this.activePiece = newTetromino(Math.floor(Math.random() * 7));
+        this.interval = 1000;
         document.querySelector("article button").addEventListener("click", () => {
             document.querySelector("article").style.display = "none";
-            gameBoard.createDivs();
+            this.createDivs();
+            this.startGame();
         });
-        gameBoard.startGame();
     }
 }
+let gameBoard = new GameBoard(newTetromino(Math.floor(Math.random() * 7)));
 
 document.querySelector("article button").addEventListener("click", () => {
     document.querySelector("article").style.display = "none";
     gameBoard.createDivs();
     gameBoard.startGame();
-    
+});
+
+document.addEventListener("keydown", e => {
+    if (e.key === "ArrowDown") gameBoard.activePiece.pieceFall();
+    if (e.key === "ArrowUp") gameBoard.activePiece.pieceRotate();
+    if (e.key === "ArrowLeft") gameBoard.activePiece.pieceLeft();
+    if (e.key === "ArrowRight") gameBoard.activePiece.pieceRight();
 });

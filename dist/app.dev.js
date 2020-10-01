@@ -150,88 +150,136 @@ var newTetromino = function newTetromino(num) {
   if (num === 6) return new Tetromino(15, 4, 5, 6, "gray", [[-1, 1, 10, 19], [1, 21, 10, -1], [1, -1, -10, -19], [-1, -21, -10, 1]]);
 };
 
-var gameBoard = {
-  hook: document.querySelector(".game-board"),
-  createDivs: function createDivs() {
-    for (var i = 1; i <= 200; i++) {
-      var div = document.createElement("div");
-      gameBoard.hook.prepend(div);
-    }
+var GameBoard =
+/*#__PURE__*/
+function () {
+  function GameBoard(activePiece) {
+    _classCallCheck(this, GameBoard);
 
-    for (var _i = 1; _i <= 20; _i++) {
-      var _div = document.createElement("div");
-
-      _div.style.display = "none";
-      gameBoard.hook.prepend(_div);
-    }
-  },
-  activePiece: newTetromino(Math.floor(Math.random() * 7)),
-  startGame: function startGame() {
-    var _this3 = this;
-
-    this.activePiece.render();
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "ArrowDown") _this3.activePiece.pieceFall();
-      if (e.key === "ArrowUp") _this3.activePiece.pieceRotate();
-      if (e.key === "ArrowLeft") _this3.activePiece.pieceLeft();
-      if (e.key === "ArrowRight") _this3.activePiece.pieceRight();
-    });
-  },
-  checkRow: function checkRow() {
-    var nodes = Array.from(gameBoard.hook.childNodes);
-    var rows = [];
-
-    for (var i = 20; i < 220; i += 10) {
-      var chunk = nodes.slice(i, i + 10);
-      rows.push(chunk);
-    }
-
-    ;
-    rows.forEach(function (row, index) {
-      if (row.every(function (squareValue) {
-        return squareValue.classList.contains("fixed");
-      })) {
-        nodes.splice((index + 2) * 10, 10);
-
-        for (var _i2 = 1; _i2 <= 10; _i2++) {
-          var div = document.createElement("div");
-          div.style.display = "block";
-          nodes.splice(20, 0, div);
-        }
-
-        gameBoard.hook.innerHTML = "";
-        nodes.forEach(function (node) {
-          gameBoard.hook.appendChild(node);
-        });
-      }
-    });
-  },
-  checkLose: function checkLose() {
-    var nodes = Array.from(gameBoard.hook.childNodes);
-
-    for (var i = 0; i < 20; i++) {
-      if (nodes[i].classList.contains("fixed")) {
-        alert("You lose!");
-        this.reset();
-        return true;
-      }
-    }
-
-    ;
-  },
-  reset: function reset() {
-    gameBoard.hook.innerHTML = "";
-    var welcomeScreen = "\n                        <article class=\"welcome-screen\">\n                            <h1>Tetris</h1>\n                            <button>Start new game</button>\n                        </article>";
-    gameBoard.hook.innerHTML = welcomeScreen;
-    document.querySelector("article button").addEventListener("click", function () {
-      document.querySelector("article").style.display = "none";
-      gameBoard.createDivs();
-    });
-    gameBoard.startGame();
+    this.activePiece = activePiece;
+    this.hook = document.querySelector(".game-board");
+    this.interval = 1000;
   }
-};
+
+  _createClass(GameBoard, [{
+    key: "createDivs",
+    value: function createDivs() {
+      for (var i = 1; i <= 200; i++) {
+        var div = document.createElement("div");
+        this.hook.prepend(div);
+      }
+
+      for (var _i = 1; _i <= 20; _i++) {
+        var _div = document.createElement("div");
+
+        _div.style.display = "none";
+        this.hook.prepend(_div);
+      }
+    }
+  }, {
+    key: "changeInterval",
+    value: function changeInterval() {
+      var _this3 = this;
+
+      this.interval -= 100;
+      clearInterval(this.intervalMethod);
+      this.intervalMethod = setInterval(function () {
+        return _this3.activePiece.pieceFall();
+      }, this.interval);
+    }
+  }, {
+    key: "startGame",
+    value: function startGame() {
+      var _this4 = this;
+
+      this.activePiece.render();
+      this.intervalMethod = setInterval(function () {
+        return _this4.activePiece.pieceFall();
+      }, this.interval);
+      this.speedChanger = setInterval(function () {
+        return _this4.changeInterval();
+      }, 10000);
+    }
+  }, {
+    key: "checkRow",
+    value: function checkRow() {
+      var _this5 = this;
+
+      var nodes = Array.from(this.hook.childNodes);
+      var rows = [];
+
+      for (var i = 20; i < 220; i += 10) {
+        var chunk = nodes.slice(i, i + 10);
+        rows.push(chunk);
+      }
+
+      ;
+      rows.forEach(function (row, index) {
+        if (row.every(function (squareValue) {
+          return squareValue.classList.contains("fixed");
+        })) {
+          nodes.splice((index + 2) * 10, 10);
+
+          for (var _i2 = 1; _i2 <= 10; _i2++) {
+            var div = document.createElement("div");
+            div.style.display = "block";
+            nodes.splice(20, 0, div);
+          }
+
+          _this5.hook.innerHTML = "";
+          nodes.forEach(function (node) {
+            _this5.hook.appendChild(node);
+          });
+        }
+      });
+    }
+  }, {
+    key: "checkLose",
+    value: function checkLose() {
+      var nodes = Array.from(this.hook.childNodes);
+
+      for (var i = 0; i < 20; i++) {
+        if (nodes[i].classList.contains("fixed")) {
+          clearInterval(this.intervalMethod);
+          clearInterval(this.speedChanger);
+          alert("You lose!");
+          return this.reset();
+        }
+      }
+
+      ;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      var _this6 = this;
+
+      var welcomeScreen = "\n                            <article class=\"welcome-screen\">\n                                <h1>Tetris</h1>\n                                <button>Start new game</button>\n                            </article>";
+      gameBoard.hook.innerHTML = welcomeScreen;
+      this.activePiece = newTetromino(Math.floor(Math.random() * 7));
+      this.interval = 1000;
+      document.querySelector("article button").addEventListener("click", function () {
+        document.querySelector("article").style.display = "none";
+
+        _this6.createDivs();
+
+        _this6.startGame();
+      });
+    }
+  }]);
+
+  return GameBoard;
+}();
+
+var gameBoard = new GameBoard(newTetromino(Math.floor(Math.random() * 7)));
 document.querySelector("article button").addEventListener("click", function () {
   document.querySelector("article").style.display = "none";
   gameBoard.createDivs();
   gameBoard.startGame();
+});
+document.addEventListener("keydown", function (e) {
+  if (e.key === "ArrowDown") gameBoard.activePiece.pieceFall();
+  if (e.key === "ArrowUp") gameBoard.activePiece.pieceRotate();
+  if (e.key === "ArrowLeft") gameBoard.activePiece.pieceLeft();
+  if (e.key === "ArrowRight") gameBoard.activePiece.pieceRight();
 });
