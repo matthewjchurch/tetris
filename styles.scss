@@ -1,7 +1,9 @@
+@import "./stylesheets/variables.scss";
 * {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    font-family: 'Press Start 2P', cursive;
 }
 
 body {
@@ -10,38 +12,56 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: $background-color;
+
+    button {
+        position: absolute;
+        top: 10vh;
+        right: 10vw;
+        display: none;
+    }
+
+    audio {
+        display: none;
+    }
 }
 
 .game-board {
     height: 80vh;
     width: 40vh;
-    background-color: black;
+    background-color: $black;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(20, 1fr);
+    gap: 1px;
     
     > div {
         height: 100%;
         width: 100%;
-        border: 1px solid black;
-
-        &.active {
-            background-color: red;
-        }
     }
 
     article {
         grid-column: 1/-1;
         grid-row: 1/-1;
-        background-color: blue;
+        background-color: $background-color;
         display: flex;
         flex-direction: column;
         justify-content: space-around;
         align-items: center;
         
         h1 {
-            font-size: 50px;
-            font-family: 'Press Start 2P', cursive;
+            font-size: min(10vw, 60px);
+        }
+
+        .start__button {
+            position: static;
+            display: inline;
+            border: 3px solid blanchedalmond;
+            background-color: $background-color;
+            color: blanchedalmond;
+            font-size: min(3vw, 15px);
+            padding: 5%;
+            cursor: pointer;
         }
     }
 }

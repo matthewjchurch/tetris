@@ -53,7 +53,7 @@ function () {
 
       if (this.status === "active") {
         this.mapping = this.mapping.map(function (squareValue) {
-          gameBoard.hook.childNodes[squareValue].style.backgroundColor = "black";
+          gameBoard.hook.childNodes[squareValue].style.backgroundColor = "#071C1F";
           gameBoard.hook.childNodes[squareValue].classList.remove("active");
           return squareValue += 10;
         });
@@ -72,7 +72,7 @@ function () {
         return squareValue % 10 === 0;
       })) return;else if (this.status === "active") {
         this.mapping = this.mapping.map(function (squareValue) {
-          gameBoard.hook.childNodes[squareValue].style.backgroundColor = "black";
+          gameBoard.hook.childNodes[squareValue].style.backgroundColor = "#071C1F";
           gameBoard.hook.childNodes[squareValue].classList.remove("active");
           return squareValue -= 1;
         });
@@ -90,7 +90,7 @@ function () {
         return squareValue % 10 === 9;
       })) return;else if (this.status === "active") {
         this.mapping = this.mapping.map(function (squareValue) {
-          gameBoard.hook.childNodes[squareValue].style.backgroundColor = "black";
+          gameBoard.hook.childNodes[squareValue].style.backgroundColor = "#071C1F";
           gameBoard.hook.childNodes[squareValue].classList.remove("active");
           return squareValue += 1;
         });
@@ -105,7 +105,7 @@ function () {
 
       if (this.status === "active") {
         this.mapping = this.mapping.map(function (squareValue, index) {
-          gameBoard.hook.childNodes[squareValue].style.backgroundColor = "black";
+          gameBoard.hook.childNodes[squareValue].style.backgroundColor = "#071C1F";
           gameBoard.hook.childNodes[squareValue].classList.remove("active");
           return squareValue += _this2.nextRotation[index];
         });
@@ -141,13 +141,13 @@ function () {
 }();
 
 var newTetromino = function newTetromino(num) {
-  if (num === 0) return new Tetromino(4, 5, 6, 7, "red", [[-8, 11, 0, 19], [8, -11, -0, -19], [-8, 11, 0, 19], [8, -11, -0, -19]]);
-  if (num === 1) return new Tetromino(5, 6, 15, 16, "yellow", [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]);
-  if (num === 2) return new Tetromino(4, 5, 6, 16, "blue", [[-9, 0, 9, -2], [21, 10, -1, -10], [-1, -10, -19, -8], [-11, 0, 11, 20]]);
-  if (num === 3) return new Tetromino(6, 5, 4, 14, "orange", [[9, 0, -9, -20], [-1, 10, 21, 12], [-19, -10, -1, 10], [11, 0, -11, -2]]);
-  if (num === 4) return new Tetromino(14, 15, 5, 6, "pink", [[-20, -11, 0, 9], [20, 11, 0, -9], [-20, -11, 0, 9], [20, 11, 0, -9]]);
-  if (num === 5) return new Tetromino(4, 5, 15, 16, "green", [[-8, 1, -10, -1], [8, -1, 10, 1], [-8, 1, -10, -1], [8, -1, 10, 1]]);
-  if (num === 6) return new Tetromino(15, 4, 5, 6, "gray", [[-1, 1, 10, 19], [1, 21, 10, -1], [1, -1, -10, -19], [-1, -21, -10, 1]]);
+  if (num === 0) return new Tetromino(4, 5, 6, 7, "#EA3546", [[-8, 11, 0, 19], [8, -11, -0, -19], [-8, 11, 0, 19], [8, -11, -0, -19]]);
+  if (num === 1) return new Tetromino(5, 6, 15, 16, "#F9C80E", [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]);
+  if (num === 2) return new Tetromino(4, 5, 6, 16, "#43BCCD", [[-9, 0, 9, -2], [21, 10, -1, -10], [-1, -10, -19, -8], [-11, 0, 11, 20]]);
+  if (num === 3) return new Tetromino(6, 5, 4, 14, "#F86624", [[9, 0, -9, -20], [-1, 10, 21, 12], [-19, -10, -1, 10], [11, 0, -11, -2]]);
+  if (num === 4) return new Tetromino(14, 15, 5, 6, "#CC5893", [[-20, -11, 0, 9], [20, 11, 0, -9], [-20, -11, 0, 9], [20, 11, 0, -9]]);
+  if (num === 5) return new Tetromino(4, 5, 15, 16, "#2BAB55", [[-8, 1, -10, -1], [8, -1, 10, 1], [-8, 1, -10, -1], [8, -1, 10, 1]]);
+  if (num === 6) return new Tetromino(15, 4, 5, 6, "#662E9B", [[-1, 1, 10, 19], [1, 21, 10, -1], [1, -1, -10, -19], [-1, -21, -10, 1]]);
 };
 
 var GameBoard =
@@ -158,7 +158,7 @@ function () {
 
     this.activePiece = activePiece;
     this.hook = document.querySelector(".game-board");
-    this.interval = 1000;
+    this.interval = 600;
   }
 
   _createClass(GameBoard, [{
@@ -181,7 +181,7 @@ function () {
     value: function changeInterval() {
       var _this3 = this;
 
-      this.interval -= 100;
+      this.interval *= 0.9;
       clearInterval(this.intervalMethod);
       this.intervalMethod = setInterval(function () {
         return _this3.activePiece.pieceFall();
@@ -240,8 +240,6 @@ function () {
 
       for (var i = 0; i < 20; i++) {
         if (nodes[i].classList.contains("fixed")) {
-          clearInterval(this.intervalMethod);
-          clearInterval(this.speedChanger);
           alert("You lose!");
           return this.reset();
         }
@@ -254,16 +252,23 @@ function () {
     value: function reset() {
       var _this6 = this;
 
-      var welcomeScreen = "\n                            <article class=\"welcome-screen\">\n                                <h1>Tetris</h1>\n                                <button>Start new game</button>\n                            </article>";
+      document.querySelector("audio").pause();
+      document.querySelector("audio").currentTime = 0;
+      clearInterval(this.intervalMethod);
+      clearInterval(this.speedChanger);
+      var welcomeScreen = "\n                            <article class=\"start\">\n                                <h1>Tetris</h1>\n                                <button class=\"start__button\">Start new game</button>\n                            </article>";
       gameBoard.hook.innerHTML = welcomeScreen;
       this.activePiece = newTetromino(Math.floor(Math.random() * 7));
-      this.interval = 1000;
+      this.interval = 600;
       document.querySelector("article button").addEventListener("click", function () {
         document.querySelector("article").style.display = "none";
 
         _this6.createDivs();
 
         _this6.startGame();
+
+        document.querySelector(".reset").style.display = "inline";
+        document.querySelector("audio").play();
       });
     }
   }]);
@@ -272,10 +277,16 @@ function () {
 }();
 
 var gameBoard = new GameBoard(newTetromino(Math.floor(Math.random() * 7)));
-document.querySelector("article button").addEventListener("click", function () {
+document.querySelector(".start__button").addEventListener("click", function () {
   document.querySelector("article").style.display = "none";
   gameBoard.createDivs();
   gameBoard.startGame();
+  document.querySelector(".reset").style.display = "inline";
+  document.querySelector("audio").play();
+});
+document.querySelector(".reset").addEventListener("click", function (e) {
+  gameBoard.reset();
+  e.target.style.display = "none";
 });
 document.addEventListener("keydown", function (e) {
   if (e.key === "ArrowDown") gameBoard.activePiece.pieceFall();
