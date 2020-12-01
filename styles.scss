@@ -10,11 +10,12 @@ body {
     width: 100vw;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     background-color: $background-color;
 
-    button {
+    button.reset {
         position: absolute;
         top: 5vh;
         right: 5vw;
@@ -28,6 +29,30 @@ body {
 
     audio {
         display: none;
+    }
+
+    section.button-area {
+        height: 10vh;
+        width: 200px;
+        display: none;
+
+        div {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            button.direction {
+                height: 30px;
+                width: 40px;
+                margin-top: 5px;
+                margin-left: 5px;
+                border: 3px solid blanchedalmond;
+                background-color: $background-color;
+                color: blanchedalmond;
+                padding: 1%;
+                cursor: pointer;
+            }
+        }
     }
 }
 
@@ -67,6 +92,20 @@ body {
             font-size: min(3vw, 15px);
             padding: 5%;
             cursor: pointer;
+        }
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    body {
+        section.button-area {
+            display: block;
+        }
+
+        button.reset {
+            top: 90vh;
+            left: 5vw;
+            width: auto;
         }
     }
 }

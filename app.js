@@ -42,8 +42,8 @@ class Tetromino {
 
     // Move piece left and right within bounds of the game area
     pieceLeft() {
-        let nodes = Array.from(gameBoard.hook.childNodes);
-        if (this.mapping.some((squareValue, index) => nodes[squareValue-1].classList.contains("fixed"))) return;
+        const nodes = Array.from(gameBoard.hook.childNodes);
+        if (this.mapping.some((squareValue) => nodes[squareValue-1].classList.contains("fixed"))) return;
         if (this.mapping.some(squareValue => squareValue % 10 === 0)) return;
         else if (this.status === "active") {
                 this.mapping = this.mapping.map(squareValue => {
@@ -56,8 +56,8 @@ class Tetromino {
     }
 
     pieceRight() {
-        let nodes = Array.from(gameBoard.hook.childNodes);
-        if (this.mapping.some((squareValue, index) => nodes[squareValue+1].classList.contains("fixed"))) return;
+        const nodes = Array.from(gameBoard.hook.childNodes);
+        if (this.mapping.some((squareValue) => nodes[squareValue+1].classList.contains("fixed"))) return;
         if (this.mapping.some(squareValue => squareValue % 10 === 9)) return;
         else if (this.status === "active") {
             this.mapping = this.mapping.map(squareValue => {
@@ -140,8 +140,8 @@ class GameBoard  {
     }
 
     checkRow() {
-        let nodes = Array.from(this.hook.childNodes);
-        let rows = [];
+        const nodes = Array.from(this.hook.childNodes);
+        const rows = [];
         for (let i = 20; i < 220; i += 10) {
             let chunk = nodes.slice(i, i + 10);
             rows.push(chunk);
@@ -164,7 +164,7 @@ class GameBoard  {
     }
 
     checkLose() {
-        let nodes = Array.from(this.hook.childNodes);
+        const nodes = Array.from(this.hook.childNodes);
         for (let i = 0; i < 20; i ++) {
             if (nodes[i].classList.contains("fixed")){
                 alert("You lose!");
@@ -178,7 +178,8 @@ class GameBoard  {
         document.querySelector("audio").currentTime = 0;
         clearInterval(this.intervalMethod);
         clearInterval(this.speedChanger);
-        let welcomeScreen = `
+        document.querySelector(".reset").style.display = "none";
+        const welcomeScreen = `
                             <article class="start">
                                 <h1>Tetris</h1>
                                 <button class="start__button">Start new game</button>
@@ -195,7 +196,7 @@ class GameBoard  {
         });
     }
 }
-let gameBoard = new GameBoard(newTetromino(Math.floor(Math.random() * 7)));
+const gameBoard = new GameBoard(newTetromino(Math.floor(Math.random() * 7)));
 
 document.querySelector(".start__button").addEventListener("click", () => {
     document.querySelector("article").style.display = "none";
@@ -216,3 +217,10 @@ document.addEventListener("keydown", e => {
     if (e.key === "ArrowLeft") gameBoard.activePiece.pieceLeft();
     if (e.key === "ArrowRight") gameBoard.activePiece.pieceRight();
 });
+
+document.querySelectorAll(".direction").forEach(button => button.addEventListener("click", e => {
+    if (e.target.classList.contains("down__button")) gameBoard.activePiece.pieceFall();
+    if (e.target.classList.contains("up__button")) gameBoard.activePiece.pieceRotate();
+    if (e.target.classList.contains("left__button")) gameBoard.activePiece.pieceLeft();
+    if (e.target.classList.contains("right__button")) gameBoard.activePiece.pieceRight();
+}))
